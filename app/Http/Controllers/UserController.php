@@ -9,8 +9,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 
+
 class UserController extends Controller
 {
+    /**
+     * Register User
+     */
     public function register(Request $request){
         $validate = Validator::make($request->all(),[
             'name' => 'required',
@@ -52,7 +56,15 @@ class UserController extends Controller
         }
     }
 
+     /**
+     * User Login
+     */
     function login(Request $request) {
+        $validate = Validator::make($request->all(),[
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
         if (Auth::attempt([
             'username' => $request->username,
             'password' => $request->password
