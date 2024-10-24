@@ -46,4 +46,20 @@ class CategoryController extends Controller
             ]);
         }
     }
+
+    public function get(){
+        $category = Category::all();
+
+        if (empty($category)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Data Kosong",
+            ], 201);
+        } else {
+            return response()->json([
+                'success' => true,
+                'data' => $category
+            ], 200);
+        }
+    }
 }

@@ -12,3 +12,4 @@ Route::get('/user', function (Request $request) {
 Route::post('user/register', [UserController::class, 'register']);
 Route::post('user/login', [UserController::class, 'login']);
 Route::post('category/add', [CategoryController::class, 'add']);
+Route::post('category/get', [CategoryController::class, 'get']);
