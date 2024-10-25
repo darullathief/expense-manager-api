@@ -16,7 +16,8 @@ class BudgetsController extends Controller
     public function add(Request $request){
         $validate = Validator::make($request->all(), [
             'amount' => 'required|numeric',
-            'category_id' => 'integer'
+            'category_id' => 'integer',
+            'date' => 'date_format:Y-m-d',
         ]);
 
         if ($validate->fails()) {
@@ -40,13 +41,9 @@ class BudgetsController extends Controller
             $budget = new Budgets();
             $budget->user_id = $user->id;
             $budget->amount = $request->amount;
-            $budget->date = date('Y-m-d');
-            if (!empty($request->category_id)) {
-                $budget->category_id = $request->category_id;
-            }
-            if (!empty($request->description)) {
-                $budget->description = $request->description;
-            }
+            $budget->date = (!empty($request->date)) ? $request->date : date('Y-m-d');
+            $budget->category_id = (!empty($request->category_id)) ? $request->category_id : null;
+            $budget->description = (!empty($request->description)) ? $request->description : null;
             $budget->save();
 
             $data = Budgets::find($budget->id);
