@@ -13,3 +13,5 @@ Route::post('user/register', [UserController::class, 'register']);
 Route::post('user/login', [UserController::class, 'login']);
 Route::post('category/add', [CategoryController::class, 'add']);
 Route::post('category/get', [CategoryController::class, 'get']);
+Route::post('category/edit', [CategoryController::class, 'edit']);
+Route::post('category/delete', [CategoryController::class, 'delete']);

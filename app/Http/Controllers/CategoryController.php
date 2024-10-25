@@ -47,6 +47,9 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * Get Category
+     */
     public function get(){
         $category = Category::all();
 
@@ -60,6 +63,42 @@ class CategoryController extends Controller
                 'success' => true,
                 'data' => $category
             ], 200);
+        }
+    }
+
+    /**
+     * Edit Category
+     */
+    public function edit(Request $request){
+        $validate = Validator::make($request->all(),[
+            'id' => 'required|integer',
+            'name' => 'required|string'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $validate->errors(),
+            ]);
+        }
+
+        $data = $request->all();
+        
+        try {
+            Category::where('id', $request->id)->update($data);
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil diupdate",
+                'data' => $data
+            ], 200);
+            
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $e->getMessage(),
+            ]);
         }
     }
 }
