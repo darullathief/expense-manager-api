@@ -101,4 +101,39 @@ class CategoryController extends Controller
             ]);
         }
     }
+
+    /**
+     * Delete Category
+     */
+    public function delete(Request $request) {
+        $validate = Validator::make($request->all(),[
+            'id' => 'required|integer'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $validate->errors(),
+            ]);
+        }
+
+        try {
+            $category = Category::find($request->id);
+            $category->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil dihapus",
+                'data' => $category
+            ], 200);
+            
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $e->getMessage(),
+            ]);
+        }
+    }
 }
