@@ -23,7 +23,7 @@ class CategoryController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
         
         try {
@@ -43,7 +43,7 @@ class CategoryController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage()
-            ]);
+            ], 400);
         }
     }
 
@@ -55,7 +55,7 @@ class CategoryController extends Controller
 
         if (empty($category)) {
             return response()->json([
-                'success' => false,
+                'success' => true,
                 'message' => "Data Kosong",
             ], 201);
         } else {
@@ -80,7 +80,7 @@ class CategoryController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
 
         $data = $request->all();
@@ -98,7 +98,7 @@ class CategoryController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage(),
-            ]);
+            ], 400);
         }
     }
 
@@ -115,7 +115,7 @@ class CategoryController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
 
         try {
@@ -133,7 +133,7 @@ class CategoryController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage(),
-            ]);
+            ], 400);
         }
     }
 }

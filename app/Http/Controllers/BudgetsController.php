@@ -26,7 +26,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
         $user = auth('sanctum')->user();
 
@@ -60,7 +60,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage()
-            ]);
+            ], 400);
         }
     }
 
@@ -77,7 +77,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
         $user = auth('sanctum')->user();
 
@@ -99,7 +99,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage()
-            ]);
+            ], 400);
         }
     }
 
@@ -116,7 +116,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
         $user = auth('sanctum')->user();
 
@@ -145,7 +145,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage()
-            ]);
+            ], 400);
         }
     }
 
@@ -186,7 +186,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage(),
-            ]);
+            ], 400);
         }
     }
 
@@ -203,7 +203,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
 
         try {
@@ -221,7 +221,7 @@ class BudgetsController extends Controller
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage(),
-            ]);
+            ], 400);
         }
     }
 }

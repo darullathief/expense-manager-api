@@ -29,7 +29,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => "terjadi kesalahan",
                 'data' => $validate->errors(),
-            ]);
+            ], 400);
         }
 
         $data = $request->all();
@@ -52,7 +52,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => "terjadi kesalahan",
                 'data' => $e->getMessage(),
-            ]);
+            ], 400);
         }
     }
 
@@ -80,7 +80,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "terjadi kesalahan"
-            ]);
+            ], 400);
         }
     }
 }
