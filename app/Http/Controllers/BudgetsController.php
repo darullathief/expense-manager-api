@@ -62,4 +62,40 @@ class BudgetsController extends Controller
             ]);
         }
     }
+
+    public function get(Request $request){
+        $validate = Validator::make($request->all(),[
+            'date' => 'date_format:Y-m-d'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $validate->errors(),
+            ]);
+        }
+        $user = auth('sanctum')->user();
+
+        try {
+            $date = (!empty($request->date)) ? $request->date : date("Y-m-d");
+            $first_date = date("Y-m-01", strtotime($date));
+            $last_date = date("Y-m-t", strtotime($date));
+
+            $budget = Budgets::where('user_id', $user->id)
+                  ->whereBetween('date', [$first_date, $last_date])
+                  ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $budget
+            ], 200);
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $e->getMessage()
+            ]);
+        }
+    }
 }
