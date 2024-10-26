@@ -20,3 +20,4 @@ Route::post('budgets/add', [BudgetsController::class, 'add']);
 Route::post('budgets/edit', [BudgetsController::class, 'edit']);
 Route::post('budgets/delete', [BudgetsController::class, 'delete']);
 Route::post('budgets/get', [BudgetsController::class, 'get']);
+Route::post('budgets/get_month_calculation', [BudgetsController::class, 'get_month_calculation']);
