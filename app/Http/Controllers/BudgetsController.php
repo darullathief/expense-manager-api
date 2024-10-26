@@ -18,6 +18,7 @@ class BudgetsController extends Controller
             'amount' => 'required|numeric',
             'category_id' => 'integer',
             'date' => 'date_format:Y-m-d',
+            'description' => 'string'
         ]);
 
         if ($validate->fails()) {
@@ -63,6 +64,9 @@ class BudgetsController extends Controller
         }
     }
 
+    /**
+     * Get All Budget For A Month
+     */
     public function get(Request $request){
         $validate = Validator::make($request->all(),[
             'date' => 'date_format:Y-m-d'
@@ -99,6 +103,9 @@ class BudgetsController extends Controller
         }
     }
 
+    /**
+     * Get Total Budget For A Month
+     */
     public function get_month_calculation(Request $request){
         $validate = Validator::make($request->all(),[
             'date' => 'date_format:Y-m-d'
@@ -132,12 +139,50 @@ class BudgetsController extends Controller
                 'success' => true,
                 'data' => $calculate
             ], 200);
-            
+
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
                 'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function edit(Request $request) {
+        $validate = Validator::make($request->all(),[
+            'id' => 'required|integer',
+            'category_id' => 'integer',
+            'amount' => 'numeric',
+            'date' => 'date_format:Y-m-d',
+            'description' => 'string', 
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'terjadi kesalahan',
+                'date' => $validate->errors()
+            ], 400);
+        }
+
+        $user = auth('sanctum')->user();
+        $data = $request->all();
+        $data['user_id'] = $user->id;
+        try {
+           Budgets::where('id',$request->id)->update($data);
+
+           return response()->json([
+            'success' => true,
+            'message' => "Berhasil diupdate",
+            'data' => $data
+        ], 200);
+ 
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $e->getMessage(),
             ]);
         }
     }
