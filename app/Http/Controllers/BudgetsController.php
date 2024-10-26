@@ -149,6 +149,9 @@ class BudgetsController extends Controller
         }
     }
 
+    /**
+     * Edit Budget
+     */
     public function edit(Request $request) {
         $validate = Validator::make($request->all(),[
             'id' => 'required|integer',
@@ -178,6 +181,41 @@ class BudgetsController extends Controller
             'data' => $data
         ], 200);
  
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Delete budget
+     */
+    public function delete(Request $request) {
+        $validate = Validator::make($request->all(),[
+            'id' => 'required|integer'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $validate->errors(),
+            ]);
+        }
+
+        try {
+            $budget = Budgets::find($request->id);
+            $budget->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil dihapus",
+                'data' => $budget
+            ], 200);
+            
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
