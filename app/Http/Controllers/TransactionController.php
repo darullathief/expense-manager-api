@@ -187,8 +187,7 @@ class TransactionController extends Controller
             case 'monthly':
                 return $this->get_monthly_transaction($request->start_date, $user->id);
             case 'custom':
-                # code...
-                break;
+                return $this->get_custom_range_transaction($request->start_date, $request->end_date, $user->id);
             default:
                 return response()->json([
                     'success' => false,
@@ -232,6 +231,17 @@ class TransactionController extends Controller
         
         $transaction = Transaction::where('user_id', $user_id)
                   ->whereBetween('date', [$start_date, $curr_date])
+                  ->get();
+
+        return response()->json([
+            "success" => true,
+            "data" => $transaction
+        ], 200);
+    }
+
+    private function get_custom_range_transaction($start_date, $last_date, $user_id){
+        $transaction = Transaction::where('user_id', $user_id)
+                  ->whereBetween('date', [$start_date, $last_date])
                   ->get();
 
         return response()->json([
