@@ -62,4 +62,80 @@ class TransactionController extends Controller
             ], 400);
         }
     }
+
+    /**
+     * Edit transaction
+     */
+    public function edit(Request $request) {
+        $validate = Validator::make($request->all(),[
+            'id' => 'required|integer',
+            'category_id' => 'integer',
+            'amount' => 'numeric',
+            'date' => 'date_format:Y-m-d',
+            'description' => 'string', 
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan',
+                'date' => $validate->errors()
+            ], 400);
+        }
+
+        $user = auth('sanctum')->user();
+        $data = $request->all();
+        $data['user_id'] = $user->id;
+        try {
+           Transaction::where('id',$request->id)->update($data);
+
+           return response()->json([
+            'success' => true,
+            'message' => "Berhasil diupdate",
+            'data' => $data
+        ], 200);
+ 
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
+     * Delete transaction
+     */
+    public function delete(Request $request) {
+        $validate = Validator::make($request->all(),[
+            'id' => 'required|integer'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $validate->errors(),
+            ], 400);
+        }
+
+        try {
+            $transaction = Transaction::find($request->id);
+            $transaction->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil dihapus",
+                'data' => $transaction
+            ], 200);
+            
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Terjadi kesalahan",
+                'data' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }
