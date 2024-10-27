@@ -156,6 +156,14 @@ class TransactionController extends Controller
                 "message" => $validate->errors()
             ], 400);
         }
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal melakukan aksi, user belum login",
+            ], 400);
+        }
 
         if (!empty($request->id)) {
             $transaction = Transaction::find($request->id);
@@ -173,8 +181,7 @@ class TransactionController extends Controller
 
         switch ($request->span) {
             case 'daily':
-                # code...
-                break;
+                return $this->get_daily_transaction($request->start_date, $user->id);
             case 'monthly':
                 # code...
                 break;
@@ -188,5 +195,19 @@ class TransactionController extends Controller
                 ], 400);
                 break;
         }
+    }
+
+    private function get_daily_transaction($date, $user_id){
+        $curr_date = (!empty($date)) ? $date : date("Y-m-d");
+
+        $transaction = Transaction::where([
+            ['user_id', $user_id],
+            ['date', $curr_date]
+        ])->get();
+
+        return response()->json([
+            "success" => true,
+            "data" => $transaction
+        ], 200);
     }
 }
