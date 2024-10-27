@@ -185,8 +185,7 @@ class TransactionController extends Controller
             case 'weekly':
                return $this->get_weekly_transaction($request->start_date, $user->id);
             case 'monthly':
-                # code...
-                break;
+                return $this->get_monthly_transaction($request->start_date, $user->id);
             case 'custom':
                 # code...
                 break;
@@ -216,6 +215,20 @@ class TransactionController extends Controller
     private function get_weekly_transaction($date, $user_id){
         $curr_date = (!empty($date)) ? $date : date("Y-m-d");
         $start_date = date("Y-m-d", strtotime('monday this week', strtotime($curr_date)));
+        
+        $transaction = Transaction::where('user_id', $user_id)
+                  ->whereBetween('date', [$start_date, $curr_date])
+                  ->get();
+
+        return response()->json([
+            "success" => true,
+            "data" => $transaction
+        ], 200);
+    }
+
+    private function get_monthly_transaction($date, $user_id){
+        $curr_date = (!empty($date)) ? $date : date("Y-m-d");
+        $start_date = date("Y-m-01", strtotime($curr_date));
         
         $transaction = Transaction::where('user_id', $user_id)
                   ->whereBetween('date', [$start_date, $curr_date])
