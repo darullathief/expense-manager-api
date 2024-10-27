@@ -27,7 +27,7 @@ class UserController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => "terjadi kesalahan",
+                'message' => "Terjadi kesalahan",
                 'data' => $validate->errors(),
             ], 400);
         }
@@ -50,7 +50,7 @@ class UserController extends Controller
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
-                'message' => "terjadi kesalahan",
+                'message' => "Terjadi kesalahan",
                 'data' => $e->getMessage(),
             ], 400);
         }
@@ -79,7 +79,7 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'success' => false,
-                'message' => "terjadi kesalahan"
+                'message' => "Terjadi kesalahan"
             ], 400);
         }
     }

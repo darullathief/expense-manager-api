@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->decimal('amount', total: 15, places: 2);
             $table->date('date');
-            $table->text('description');
+            $table->text('description')->nullable();;
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
