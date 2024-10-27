@@ -138,4 +138,55 @@ class TransactionController extends Controller
             ], 400);
         }
     }
+
+    /**
+     * Get Transaction
+     */
+    public function get(Request $request){
+        $validate = Validator::make($request->all(), [
+            'id' => 'integer',
+            'span' => 'required_without:id|in:daily,weekly,monthly,custom',
+            'start_date' => 'date_format:Y-m-d|required_if:span,custom',
+            'end_date' => 'date_format:Y-m-d|required_if:span,custom',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validate->errors()
+            ], 400);
+        }
+
+        if (!empty($request->id)) {
+            $transaction = Transaction::find($request->id);
+            if (empty($transaction)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Data Kosong",
+                ], 201);
+            }
+            return response()->json([
+                "success" => true,
+                "data" => $transaction
+            ], 200);
+        }
+
+        switch ($request->span) {
+            case 'daily':
+                # code...
+                break;
+            case 'monthly':
+                # code...
+                break;
+            case 'custom':
+                # code...
+                break;
+            default:
+                return response()->json([
+                    'success' => false,
+                    'message' => "Terjadi Kesalahan",
+                ], 400);
+                break;
+        }
+    }
 }

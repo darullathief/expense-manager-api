@@ -25,3 +25,4 @@ Route::post('budgets/get_month_calculation', [BudgetsController::class, 'get_mon
 Route::post('transaction/add', [TransactionController::class, 'add']);
 Route::post('transaction/edit', [TransactionController::class, 'edit']);
 Route::post('transaction/delete', [TransactionController::class, 'delete']);
+Route::post('transaction/get', [TransactionController::class, 'get']);
