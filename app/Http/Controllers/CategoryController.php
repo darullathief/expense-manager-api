@@ -15,7 +15,8 @@ class CategoryController extends Controller
      */
     public function add(Request $request){
         $validate = Validator::make($request->all(),[
-            'name' => 'required|string'
+            'name' => 'required|string',
+            'type' => 'in:income,expense'
         ]);
 
         if ($validate->fails()) {
@@ -29,6 +30,7 @@ class CategoryController extends Controller
         try {
             $category = new Category();
             $category->name = $request->name;
+            $category->type = (!empty($request->type)) ? $request->type : 'expense';
             $category->save();
 
             $data = $category->find($category->id);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -242,10 +243,16 @@ class TransactionController extends Controller
                     'data' => $data
                 ], 200);
             case 'category':
-                # code...
-                break;
-        }
+                $all_data = $this->group_calculation_by_category(
+                    $user->id, $total_expense, $request->start_date, $request->end_date);
 
+                    $data['all_data'] = $all_data;
+
+                    return response()->json([
+                        'success' => true,
+                        'data' => $data
+                    ], 200);
+        }
     }
 
     private function get_daily_transaction($date, $user_id){
@@ -322,6 +329,34 @@ class TransactionController extends Controller
             }
         }
 
+        return $all_data;
+    }
+
+    private function group_calculation_by_category($user_id, $total, $start_date, $end_date){
+        $all_data = array();
+        $category = Category::where('type', 'expense')
+                ->select('id','name')
+                ->get();
+
+        $items = json_decode($category, true);
+
+        foreach ($items as $i => $item) {
+            $transaction = (float)Transaction::where([
+                    ['user_id', $user_id], 
+                    ['category_id', $item['id']]
+                ])
+                ->whereBetween('date', [$start_date, $end_date])
+                ->sum('amount');
+
+            if (!empty($transaction) && $transaction > 0) {
+                $percent = ($transaction / $total) * 100;
+                $all_data[$item['name']]['amount'] = $transaction;
+                $all_data[$item['name']]['percent'] = $percent;
+            } else {
+                $all_data[$item['name']]['amount'] = 0;
+                $all_data[$item['name']]['percent'] = 0;
+            }
+        }
         return $all_data;
     }
 }

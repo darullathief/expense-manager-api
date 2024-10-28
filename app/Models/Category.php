@@ -11,6 +11,9 @@ class Category extends Model
     protected $table = 'category';
 
     protected $fillable = ['name'];
+    protected $attribute = [
+        'type' => 'expense'
+    ];
     public $timestamps = false;
 
     public function transaction(): HasMany
