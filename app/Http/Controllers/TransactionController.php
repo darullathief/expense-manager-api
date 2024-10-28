@@ -197,6 +197,57 @@ class TransactionController extends Controller
         }
     }
 
+    /**
+     * Get Calculation
+     */
+    public function get_calculation(Request $request){
+        $validate = Validator::make($request->all(),[
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date' => 'required|date_format:Y-m-d',
+            'group' => 'required|in:date,category'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validate->errors(),
+            ], 400);
+        }
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal melakukan aksi, user belum login",
+            ], 400);
+        }
+
+        $data = array();
+        $total_expense = (float)Transaction::where('user_id', $user->id)
+                ->whereBetween('date',[$request->start_date, $request->end_date])
+                ->sum('amount');
+
+        $data['total'] = $total_expense;
+        $data['group_by'] = $request->group;
+
+        switch ($request->group) {
+            case 'date':
+                $all_data = $this->group_calculation_by_date(
+                    $user->id, $total_expense, $request->start_date, $request->end_date);
+
+                $data['all_data'] = $all_data;
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $data
+                ], 200);
+            case 'category':
+                # code...
+                break;
+        }
+
+    }
+
     private function get_daily_transaction($date, $user_id){
         $curr_date = (!empty($date)) ? $date : date("Y-m-d");
 
@@ -248,5 +299,29 @@ class TransactionController extends Controller
             "success" => true,
             "data" => $transaction
         ], 200);
+    }
+
+    private function group_calculation_by_date($user_id, $total, $start_date, $end_date){
+        $all_data = array();
+
+        for ($i = strtotime($start_date); $i <= strtotime($end_date); $i += 86400) {
+            $date = date('Y-m-d', $i);
+
+            $transaction = (float)Transaction::where([
+                ['user_id', $user_id],
+                ['date', $date]
+            ])->sum('amount');
+
+            if (!empty($transaction) && $transaction > 0) {
+                $percent = ($transaction / $total) * 100;
+                $all_data[$date]['amount'] = $transaction;
+                $all_data[$date]['percent'] = $percent;
+            } else {
+                $all_data[$date]['amount'] = 0;
+                $all_data[$date]['percent'] = 0;
+            }
+        }
+
+        return $all_data;
     }
 }
