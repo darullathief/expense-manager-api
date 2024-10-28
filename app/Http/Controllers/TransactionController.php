@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budgets;
 use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -253,6 +254,46 @@ class TransactionController extends Controller
                         'data' => $data
                     ], 200);
         }
+    }
+
+    /**
+     * Get Balance
+     */
+    public function balance(Request $request){
+        $validate = Validator::make($request->all(),[
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date' => 'required|date_format:Y-m-d'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validate->errors(),
+            ], 400);
+        }
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal melakukan aksi, user belum login",
+            ], 400);
+        }
+
+        $budget = (float)Budgets::where('user_id', $user->id)
+                ->whereBetween('date', [$request->start_date, $request->end_date])
+                ->sum('amount');
+
+        $transaction = (float)Transaction::where('user_id', $user->id)
+                ->whereBetween('date', [$request->start_date, $request->end_date])
+                ->sum('amount');
+
+        $balance = $budget - $transaction;
+
+        return response()->json([
+            'success' => true,
+            'data' => $balance
+        ], 200);
     }
 
     private function get_daily_transaction($date, $user_id){

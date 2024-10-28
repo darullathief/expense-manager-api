@@ -27,3 +27,4 @@ Route::post('transaction/edit', [TransactionController::class, 'edit']);
 Route::post('transaction/delete', [TransactionController::class, 'delete']);
 Route::post('transaction/get', [TransactionController::class, 'get']);
 Route::post('transaction/get_calculation', [TransactionController::class, 'get_calculation']);
+Route::post('transaction/balance', [TransactionController::class, 'balance']);
