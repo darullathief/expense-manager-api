@@ -13,6 +13,25 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     /**
+     * Get User
+     */
+    public function index(){
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal melakukan aksi, user belum login",
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $user
+        ], 200);
+    }
+
+    /**
      * Register User
      */
     public function register(Request $request){

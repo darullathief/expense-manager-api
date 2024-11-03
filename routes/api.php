@@ -7,10 +7,8 @@ use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
+Route::get('user', [UserController::class, 'index']);
 Route::post('user/register', [UserController::class, 'register']);
 Route::post('user/login', [UserController::class, 'login']);
 Route::post('category/add', [CategoryController::class, 'add']);
