@@ -21,3 +21,5 @@ This project requires :
 
 ## Documentacions
 API documentation can be viewed via: `http://your_url/docs/api`
+
+![Documentations](https://i.ibb.co.com/QPqWm68/screencapture-expense-tracker-test-docs-api-2024-11-03-14-31-04.png)
