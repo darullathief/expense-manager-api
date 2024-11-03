@@ -25,4 +25,4 @@ Route::post('transaction/edit', [TransactionController::class, 'edit']);
 Route::post('transaction/delete', [TransactionController::class, 'delete']);
 Route::get('transaction/get', [TransactionController::class, 'get']);
 Route::get('transaction/get_calculation', [TransactionController::class, 'get_calculation']);
-Route::post('transaction/balance', [TransactionController::class, 'balance']);
+Route::get('transaction/balance', [TransactionController::class, 'balance']);
