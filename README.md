@@ -1,5 +1,8 @@
 # Expense Manager API
 
+## Overview
+This project is a RESTful API built with Laravel and MariaDb that allows users to manage their expenses. This solution is based off the [Roadmap.sh](https://roadmap.sh/projects/expense-tracker-api) Expense Tracker API project.
+
 ## Prerequisites
 This project requires :
 - PHP 8.2 or higher
