@@ -164,7 +164,7 @@ class BudgetsController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'terjadi kesalahan',
+                'message' => 'Terjadi kesalahan',
                 'date' => $validate->errors()
             ], 400);
         }
